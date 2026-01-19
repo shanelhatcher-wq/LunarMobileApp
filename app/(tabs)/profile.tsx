@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { ImageBackground, View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -45,12 +45,17 @@ export default function ProfileScreen() {
 
   const handleLanguageChange = async (newLanguage: Language) => {
     await setLanguage(newLanguage);
-    showAlert(t.alerts.success, t.alerts.languageChanged);
+    showAlert(t.alerts.success, t.alerts.languageChanged); 
   };
 
   if (status.isPro) {
     return (
       <View style={styles.container}>
+        <ImageBackground
+          source={require('@/assets/images/space.png')}
+          style={styles.background}
+          resizeMode="cover"
+        >
         <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
@@ -124,12 +129,18 @@ export default function ProfileScreen() {
 
           <View style={styles.spacing} />
         </ScrollView>
+        </ImageBackground>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={require('@/assets/images/space.png')}
+        style={styles.background}
+        resizeMode="cover"
+      >
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
@@ -150,7 +161,7 @@ export default function ProfileScreen() {
       <View style={styles.upgradeCard}>
         <View style={styles.moonIconLarge}>
           <Image
-            source={require('@/assets/images/moon-hero.png')}
+            source={require('@/assets/images/040.moon.png')}
             style={styles.moonIcon}
             contentFit="contain"
           />
@@ -210,6 +221,7 @@ export default function ProfileScreen() {
 
         <View style={styles.spacing} />
       </ScrollView>
+      </ImageBackground>
     </View>
   );
 }
@@ -224,6 +236,10 @@ function FeatureItem({ icon, text }: { icon: string; text: string }) {
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
   container: {
     flex: 1,
     backgroundColor: 'transparent',

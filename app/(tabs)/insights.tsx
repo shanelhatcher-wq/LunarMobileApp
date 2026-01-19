@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { ImageBackground, View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { theme } from '@/constants/theme';
@@ -27,6 +27,11 @@ export default function InsightsScreen() {
 
   return (
     <View style={styles.container}>
+            <ImageBackground
+              source={require('@/assets/images/space.png')}
+              style={styles.background}
+              resizeMode="cover"
+            >
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
@@ -55,6 +60,7 @@ export default function InsightsScreen() {
               isLocked={false}
             />
           </View>
+          
         </View>
       ) : (
         <View style={styles.content}>
@@ -91,11 +97,16 @@ export default function InsightsScreen() {
 
         <View style={styles.spacing} />
       </ScrollView>
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
   container: {
     flex: 1,
     backgroundColor: 'transparent',

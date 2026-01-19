@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { ImageBackground, View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '@/constants/theme';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -26,6 +26,11 @@ export default function CalendarScreen() {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={require('@/assets/images/space.png')}
+        style={styles.background}
+        resizeMode="cover"
+      >
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
@@ -39,11 +44,16 @@ export default function CalendarScreen() {
 
         <View style={styles.spacing} />
       </ScrollView>
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
   container: {
     flex: 1,
     backgroundColor: 'transparent',

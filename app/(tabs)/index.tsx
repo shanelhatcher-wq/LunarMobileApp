@@ -80,11 +80,11 @@ export default function MoonScreen() {
 
   return (
     <View style={styles.container}>
-                <ImageBackground
-                  source={require('@/assets/images/space.png')}
-                  style={styles.background}
-                  resizeMode="cover"
-                >
+      <ImageBackground
+        source={require('@/assets/images/space.png')}
+        style={styles.background}
+        resizeMode="cover"
+      >
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={{ paddingTop: insets.top }}
