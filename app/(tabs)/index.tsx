@@ -81,7 +81,7 @@ export default function MoonScreen() {
   return (
     <View style={styles.container}>
                 <ImageBackground
-                  source={require('@/assets/images/stars-background.png')}
+                  source={require('@/assets/images/space.png')}
                   style={styles.background}
                   resizeMode="cover"
                 >

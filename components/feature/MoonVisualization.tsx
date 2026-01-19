@@ -16,7 +16,7 @@ export function MoonVisualization({ moonPhase }: MoonVisualizationProps) {
     <View style={styles.container}>
       <View style={styles.moonContainer}>
         <Image
-          source={require('@/assets/images/moon-hero.png')}
+          source={require('@/assets/images/040.moon.png')}
           style={styles.moonImage}
           contentFit="contain"
           transition={200}

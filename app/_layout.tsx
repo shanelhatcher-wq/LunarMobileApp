@@ -10,23 +10,18 @@ export default function RootLayout() {
     <AlertProvider>
       <SafeAreaProvider>
         <LanguageProvider>
-          <ImageBackground
-            source={require('@/assets/images/stars-background.png')}
-            style={styles.background}
-            resizeMode="cover"
-          >
+        
             <StatusBar style="light" />
             <Stack
               screenOptions={{
                 headerShown: false,
                 contentStyle: {
-                  backgroundColor: 'transparent',
+                  backgroundColor: 'black',
                 },
               }}
             >
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>
-          </ImageBackground>
         </LanguageProvider>
       </SafeAreaProvider>
     </AlertProvider>

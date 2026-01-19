@@ -71,12 +71,12 @@ export default function ProfileScreen() {
         <View style={styles.proCard}>
           <View style={styles.moonIconLarge}>
             <Image
-              source={require('@/assets/images/moon-hero.png')}
+              source={require('@/assets/images/040.moon.png')}
               style={styles.moonIcon}
               contentFit="contain"
             />
           </View>
-          
+  
           <Text style={styles.proTitle}>{t.profile.moonProActive}</Text>
           <Text style={styles.proDescription}>
             {t.profile.allFeaturesAccess}
