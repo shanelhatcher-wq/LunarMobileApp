@@ -2,21 +2,18 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '@/constants/theme';
+import { useTranslation } from '@/hooks/useTranslation';
 import { getMonthMoonData, DayMoonData } from '@/services/moonPhaseService';
 
 interface CalendarGridProps {
   onDateSelect?: (data: DayMoonData) => void;
+  initialSelectedDate?: Date;
 }
 
-const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-export function CalendarGrid({ onDateSelect }: CalendarGridProps) {
+export function CalendarGrid({ onDateSelect, initialSelectedDate }: CalendarGridProps) {
+  const { t } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate || null);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -96,7 +93,7 @@ export function CalendarGrid({ onDateSelect }: CalendarGridProps) {
         </Pressable>
         
         <Text style={styles.monthYear}>
-          {MONTHS[month]} {year}
+          {t.calendar.months[month]} {year}
         </Text>
         
         <Pressable onPress={handleNextMonth} style={styles.navButton}>
@@ -105,7 +102,7 @@ export function CalendarGrid({ onDateSelect }: CalendarGridProps) {
       </View>
 
       <View style={styles.weekdaysRow}>
-        {WEEKDAYS.map((day) => (
+        {t.calendar.weekdays.map((day) => (
           <View key={day} style={styles.weekdayCell}>
             <Text style={styles.weekdayText}>{day}</Text>
           </View>
@@ -127,6 +124,7 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.spacing.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    backdropFilter: 'blur(10px)',
   },
   header: {
     flexDirection: 'row',

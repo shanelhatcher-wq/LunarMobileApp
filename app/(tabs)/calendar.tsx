@@ -1,29 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '@/constants/theme';
+import { useTranslation } from '@/hooks/useTranslation';
 import { CalendarGrid } from '@/components/feature/CalendarGrid';
 import { DayDetailsCard } from '@/components/feature/DayDetailsCard';
-import { DayMoonData } from '@/services/moonPhaseService';
+import { DayMoonData, getMoonPhaseForDate } from '@/services/moonPhaseService';
 
 export default function CalendarScreen() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const [selectedDay, setSelectedDay] = useState<DayMoonData | null>(null);
 
-  return (
-    <ScrollView 
-      style={styles.container}
-      contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
-      showsVerticalScrollIndicator={false}
-    >
-      <Text style={styles.title}>Lunar Calendar</Text>
+  // Pre-select today's date on mount
+  useEffect(() => {
+    const today = new Date();
+    const todayMoonPhase = getMoonPhaseForDate(today);
+    setSelectedDay({
+      date: today,
+      phase: todayMoonPhase.phase,
+      illumination: todayMoonPhase.illumination,
+      emoji: todayMoonPhase.emoji,
+    });
+  }, []);
 
-      <CalendarGrid onDateSelect={setSelectedDay} />
+  return (
+    <View style={styles.container}>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>{t.calendar.title}</Text>
+
+      <CalendarGrid onDateSelect={setSelectedDay} initialSelectedDate={new Date()} />
 
       {selectedDay && <DayDetailsCard dayData={selectedDay} />}
 
-      <View style={styles.spacing} />
-    </ScrollView>
+        <View style={styles.spacing} />
+      </ScrollView>
+    </View>
   );
 }
 
@@ -31,6 +47,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'transparent',
+  },
+  scrollView: {
+    flex: 1,
   },
   title: {
     fontSize: 28,

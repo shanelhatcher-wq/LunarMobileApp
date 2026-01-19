@@ -1,14 +1,14 @@
 export const theme = {
   colors: {
     background: '#0a0e1a',
-    surface: '#1a1f2e',
-    surfaceLight: '#252b3d',
+    surface: 'rgba(26, 31, 46, 0.6)',
+    surfaceLight: 'rgba(37, 43, 61, 0.7)',
     primary: '#d4af37',
     primaryLight: '#f0d78c',
     text: '#ffffff',
     textSecondary: '#8a92a8',
     textTertiary: '#5a6276',
-    border: '#2a3144',
+    border: 'rgba(42, 49, 68, 0.5)',
     accent: '#4a5568',
     success: '#4ade80',
     warning: '#fbbf24',

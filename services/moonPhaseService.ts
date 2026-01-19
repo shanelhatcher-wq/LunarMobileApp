@@ -149,6 +149,23 @@ export function getDaysUntilNextNewMoon(): number {
   return Math.ceil(daysUntilNew);
 }
 
+export function getDaysUntilNextFullMoon(): number {
+  const current = getCurrentMoonPhase();
+  const daysInCycle = 29.53;
+  const fullMoonAge = daysInCycle / 2; // Full moon is at ~14.765 days
+  
+  let daysUntilFull;
+  if (current.age < fullMoonAge) {
+    // We haven't reached full moon yet this cycle
+    daysUntilFull = fullMoonAge - current.age;
+  } else {
+    // Full moon has passed, calculate next cycle
+    daysUntilFull = (daysInCycle - current.age) + fullMoonAge;
+  }
+  
+  return Math.ceil(daysUntilFull);
+}
+
 export function getMonthMoonData(year: number, month: number): DayMoonData[] {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);

@@ -6,13 +6,18 @@ import { theme } from '@/constants/theme';
 interface LockedFeatureCardProps {
   title: string;
   description: string;
+  isLocked?: boolean;
 }
 
-export function LockedFeatureCard({ title, description }: LockedFeatureCardProps) {
+export function LockedFeatureCard({ title, description, isLocked = true }: LockedFeatureCardProps) {
   return (
     <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <MaterialIcons name="lock" size={20} color={theme.colors.primary} />
+      <View style={[styles.iconContainer, !isLocked && styles.iconContainerUnlocked]}>
+        <MaterialIcons 
+          name={isLocked ? "lock" : "check-circle"} 
+          size={20} 
+          color={isLocked ? theme.colors.primary : theme.colors.success} 
+        />
       </View>
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>
@@ -31,6 +36,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.colors.border,
     gap: theme.spacing.md,
+    backdropFilter: 'blur(10px)',
   },
   iconContainer: {
     width: 40,
@@ -39,6 +45,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surfaceLight,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconContainerUnlocked: {
+    backgroundColor: 'rgba(52, 211, 153, 0.15)',
   },
   content: {
     flex: 1,

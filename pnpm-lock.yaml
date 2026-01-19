@@ -1072,6 +1072,9 @@ packages:
   '@expo/code-signing-certificates@0.0.5':
     resolution: {integrity: sha512-BNhXkY1bblxKZpltzAx98G2Egj9g1Q+JRcvR7E99DOj862FTCX+ZPsAUtPTr7aHxwtrL7+fL3r0JSmM9kBm+Bw==}
 
+  '@expo/config-plugins@10.0.2':
+    resolution: {integrity: sha512-TzUn3pPdpwCS0yYaSlZOClgDmCX8N4I2lfgitX5oStqmvpPtB+vqtdyqsVM02fQ2tlJIAqwBW+NHaHqqy8Jv7g==}
+
   '@expo/config-plugins@10.0.3':
     resolution: {integrity: sha512-fjCckkde67pSDf48x7wRuPsgQVIqlDwN7NlOk9/DFgQ1hCH0L5pGqoSmikA1vtAyiA83MOTpkGl3F3wyATyUog==}
 
@@ -5701,6 +5704,7 @@ packages:
   tar@7.4.3:
     resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
     engines: {node: '>=18'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
   temp-dir@2.0.0:
     resolution: {integrity: sha512-aoBAniQmmwtcKp/7BzsH8Cxzv8OL736p7v1ihGb5e9DJ9kTwGWHrQrVB5+lfVDzfGrdRzXch+ig7LHaY1JTOrg==}
@@ -7076,6 +7080,25 @@ snapshots:
       node-forge: 1.3.1
       nullthrows: 1.1.1
 
+  '@expo/config-plugins@10.0.2':
+    dependencies:
+      '@expo/config-types': 53.0.4
+      '@expo/json-file': 9.1.4
+      '@expo/plist': 0.3.4
+      '@expo/sdk-runtime-versions': 1.0.0
+      chalk: 4.1.2
+      debug: 4.4.1
+      getenv: 1.0.0
+      glob: 10.4.5
+      resolve-from: 5.0.0
+      semver: 7.7.2
+      slash: 3.0.0
+      slugify: 1.6.6
+      xcode: 3.0.1
+      xml2js: 0.6.0
+    transitivePeerDependencies:
+      - supports-color
+
   '@expo/config-plugins@10.0.3':
     dependencies:
       '@expo/config-types': 53.0.4
@@ -7121,7 +7144,7 @@ snapshots:
   '@expo/config@11.0.10':
     dependencies:
       '@babel/code-frame': 7.10.4
-      '@expo/config-plugins': 10.0.3
+      '@expo/config-plugins': 10.0.2
       '@expo/config-types': 53.0.4
       '@expo/json-file': 9.1.4
       deepmerge: 4.3.1

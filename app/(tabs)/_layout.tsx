@@ -3,9 +3,11 @@ import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
 import { theme } from '@/constants/theme';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   const tabBarStyle = {
     height: Platform.select({
@@ -41,7 +43,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Moon',
+          title: t.tabs.moon,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="nightlight-round" size={size} color={color} />
           ),
@@ -50,7 +52,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="calendar"
         options={{
-          title: 'Calendar',
+          title: t.tabs.calendar,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="calendar-today" size={size} color={color} />
           ),
@@ -59,7 +61,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="insights"
         options={{
-          title: 'Insights',
+          title: t.tabs.insights,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="insights" size={size} color={color} />
           ),
@@ -68,7 +70,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
+          title: t.tabs.profile,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="person" size={size} color={color} />
           ),

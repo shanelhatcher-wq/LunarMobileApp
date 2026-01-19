@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '@/constants/theme';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface IlluminationChartProps {
   data: { day: string; value: number }[];
 }
 
 export function IlluminationChart({ data }: IlluminationChartProps) {
+  const { t } = useTranslation();
   const chartWidth = Dimensions.get('window').width - theme.spacing.md * 4;
   const chartHeight = 180;
   const maxValue = 100;
@@ -28,8 +30,8 @@ export function IlluminationChart({ data }: IlluminationChartProps) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.title}>Illumination Trend</Text>
-          <Text style={styles.subtitle}>Illumination over the month</Text>
+          <Text style={styles.title}>{t.insights.illuminationTrend}</Text>
+          <Text style={styles.subtitle}>{t.insights.illuminationTrendSubtitle}</Text>
         </View>
       </View>
 
@@ -82,6 +84,7 @@ const styles = StyleSheet.create({
     padding: theme.spacing.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    backdropFilter: 'blur(10px)',
   },
   header: {
     flexDirection: 'row',

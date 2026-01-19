@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '@/constants/theme';
+import { useTranslation } from '@/hooks/useTranslation';
 import { MoonTimes, SunTimes } from '@/services/moonPhaseService';
 
 interface MoonTimesCardProps {
@@ -10,6 +11,8 @@ interface MoonTimesCardProps {
 }
 
 export function MoonTimesCard({ moonTimes, sunTimes }: MoonTimesCardProps) {
+  const { t } = useTranslation();
+  
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
       hour: 'numeric',
@@ -20,14 +23,14 @@ export function MoonTimesCard({ moonTimes, sunTimes }: MoonTimesCardProps) {
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Sun Times</Text>
+        <Text style={styles.sectionTitle}>{t.home.sunTimes}</Text>
         <View style={styles.row}>
           <View style={styles.timeItem}>
             <View style={styles.iconContainer}>
               <MaterialIcons name="wb-sunny" size={20} color={theme.colors.primary} />
             </View>
             <View>
-              <Text style={styles.label}>Sunrise</Text>
+              <Text style={styles.label}>{t.home.sunrise}</Text>
               <Text style={styles.time}>{formatTime(sunTimes.sunrise)}</Text>
             </View>
           </View>
@@ -36,7 +39,7 @@ export function MoonTimesCard({ moonTimes, sunTimes }: MoonTimesCardProps) {
               <MaterialIcons name="brightness-3" size={20} color={theme.colors.primary} />
             </View>
             <View>
-              <Text style={styles.label}>Sunset</Text>
+              <Text style={styles.label}>{t.home.sunset}</Text>
               <Text style={styles.time}>{formatTime(sunTimes.sunset)}</Text>
             </View>
           </View>
@@ -46,14 +49,14 @@ export function MoonTimesCard({ moonTimes, sunTimes }: MoonTimesCardProps) {
       <View style={styles.divider} />
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Moon Times</Text>
+        <Text style={styles.sectionTitle}>{t.home.moonTimes}</Text>
         <View style={styles.row}>
           <View style={styles.timeItem}>
             <View style={styles.iconContainer}>
               <MaterialIcons name="arrow-upward" size={20} color={theme.colors.primary} />
             </View>
             <View>
-              <Text style={styles.label}>Moonrise</Text>
+              <Text style={styles.label}>{t.home.moonrise}</Text>
               <Text style={styles.time}>{formatTime(moonTimes.moonrise)}</Text>
             </View>
           </View>
@@ -62,7 +65,7 @@ export function MoonTimesCard({ moonTimes, sunTimes }: MoonTimesCardProps) {
               <MaterialIcons name="arrow-downward" size={20} color={theme.colors.primary} />
             </View>
             <View>
-              <Text style={styles.label}>Moonset</Text>
+              <Text style={styles.label}>{t.home.moonset}</Text>
               <Text style={styles.time}>{formatTime(moonTimes.moonset)}</Text>
             </View>
           </View>
@@ -80,6 +83,7 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.spacing.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    backdropFilter: 'blur(10px)',
   },
   section: {
     gap: theme.spacing.sm,

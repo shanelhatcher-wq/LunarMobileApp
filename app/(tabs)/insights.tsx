@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { theme } from '@/constants/theme';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useTranslation } from '@/hooks/useTranslation';
 import { PremiumBadge } from '@/components/ui/PremiumBadge';
 import { IlluminationChart } from '@/components/feature/IlluminationChart';
 import { LockedFeatureCard } from '@/components/feature/LockedFeatureCard';
@@ -13,6 +14,7 @@ export default function InsightsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { status } = useSubscription();
+  const { t } = useTranslation();
 
   const chartData = getIlluminationTrendData();
 
@@ -20,18 +22,22 @@ export default function InsightsScreen() {
     router.push('/(tabs)/profile');
   };
 
+  // User has premium access if they're subscribed OR on trial
+  const hasAccess = status.isPro || status.isTrialActive;
+
   return (
-    <ScrollView 
-      style={styles.container}
-      contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.header}>
-        <Text style={styles.title}>Premium Insights</Text>
-        {status.isPro && <PremiumBadge />}
+    <View style={styles.container}>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.header}>
+        <Text style={styles.title}>{t.insights.title}</Text>
+        {hasAccess && <PremiumBadge />}
       </View>
 
-      {status.isPro ? (
+      {hasAccess ? (
         <View style={styles.content}>
           <View style={styles.chartWrapper}>
             <IlluminationChart data={chartData} />
@@ -39,12 +45,14 @@ export default function InsightsScreen() {
 
           <View style={styles.featuresGrid}>
             <LockedFeatureCard
-              title="Astrological Influences"
-              description="Unlock data about astrological events and influences."
+              title={t.insights.astrologicalInfluences}
+              description={t.insights.astrologicalDescription}
+              isLocked={false}
             />
             <LockedFeatureCard
-              title="Advanced Lunar Data"
-              description="Experience lunar cycles with enhanced data."
+              title={t.insights.advancedData}
+              description={t.insights.advancedDataDescription}
+              isLocked={false}
             />
           </View>
         </View>
@@ -52,9 +60,9 @@ export default function InsightsScreen() {
         <View style={styles.content}>
           <View style={styles.lockedOverlay}>
             <Text style={styles.lockedText}>🔒</Text>
-            <Text style={styles.lockedTitle}>Premium Content</Text>
+            <Text style={styles.lockedTitle}>{t.insights.premiumContent}</Text>
             <Text style={styles.lockedDescription}>
-              Unlock detailed moon insights, illumination trends, and astrological data
+              {t.insights.unlockDescription}
             </Text>
           </View>
 
@@ -64,23 +72,26 @@ export default function InsightsScreen() {
 
           <View style={styles.featuresGrid}>
             <LockedFeatureCard
-              title="Astrological Influences"
-              description="Unlock data about astrological events and influences."
+              title={t.insights.astrologicalInfluences}
+              description={t.insights.astrologicalDescription}
+              isLocked={false}
             />
             <LockedFeatureCard
-              title="Advanced Lunar Data"
-              description="Experience lunar cycles with enhanced data."
+              title={t.insights.advancedData}
+              description={t.insights.advancedDataDescription}
+              isLocked={false}
             />
           </View>
 
           <Pressable style={styles.unlockButton} onPress={handleUnlock}>
-            <Text style={styles.unlockButtonText}>Unlock with Moon Pro</Text>
+            <Text style={styles.unlockButtonText}>{t.insights.unlockButton}</Text>
           </Pressable>
         </View>
       )}
 
-      <View style={styles.spacing} />
-    </ScrollView>
+        <View style={styles.spacing} />
+      </ScrollView>
+    </View>
   );
 }
 
@@ -88,6 +99,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'transparent',
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -113,6 +127,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    backdropFilter: 'blur(10px)',
   },
   lockedText: {
     fontSize: 48,

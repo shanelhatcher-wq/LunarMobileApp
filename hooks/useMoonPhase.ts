@@ -1,30 +1,37 @@
 import { useState, useEffect } from 'react';
-import { getCurrentMoonPhase, getMoonTimes, getSunTimes, getDaysUntilNextNewMoon, MoonPhase, MoonTimes, SunTimes } from '@/services/moonPhaseService';
+import { getCurrentMoonPhase, getMoonPhaseForDate, getMoonTimes, getSunTimes, getDaysUntilNextNewMoon, getDaysUntilNextFullMoon, MoonPhase, MoonTimes, SunTimes } from '@/services/moonPhaseService';
 
-export function useMoonPhase() {
+export function useMoonPhase(selectedDate?: Date) {
   const [moonPhase, setMoonPhase] = useState<MoonPhase | null>(null);
   const [moonTimes, setMoonTimes] = useState<MoonTimes | null>(null);
   const [sunTimes, setSunTimes] = useState<SunTimes | null>(null);
   const [daysUntilNewMoon, setDaysUntilNewMoon] = useState<number>(0);
+  const [daysUntilFullMoon, setDaysUntilFullMoon] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadMoonData();
-    const interval = setInterval(loadMoonData, 60000);
-    return () => clearInterval(interval);
-  }, []);
+    // Only auto-refresh if no date is selected (viewing current day)
+    if (!selectedDate) {
+      const interval = setInterval(loadMoonData, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [selectedDate]);
 
   const loadMoonData = () => {
     try {
-      const phase = getCurrentMoonPhase();
-      const times = getMoonTimes();
-      const sun = getSunTimes();
-      const days = getDaysUntilNextNewMoon();
+      const targetDate = selectedDate || new Date();
+      const phase = selectedDate ? getMoonPhaseForDate(targetDate) : getCurrentMoonPhase();
+      const times = getMoonTimes(targetDate);
+      const sun = getSunTimes(targetDate);
+      const daysNew = getDaysUntilNextNewMoon();
+      const daysFull = getDaysUntilNextFullMoon();
 
       setMoonPhase(phase);
       setMoonTimes(times);
       setSunTimes(sun);
-      setDaysUntilNewMoon(days);
+      setDaysUntilNewMoon(daysNew);
+      setDaysUntilFullMoon(daysFull);
     } catch (error) {
       console.error('Error loading moon data:', error);
     } finally {
@@ -37,6 +44,7 @@ export function useMoonPhase() {
     moonTimes,
     sunTimes,
     daysUntilNewMoon,
+    daysUntilFullMoon,
     loading,
     refresh: loadMoonData,
   };

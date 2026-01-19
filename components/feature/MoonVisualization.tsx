@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { theme } from '@/constants/theme';
+import { useTranslation } from '@/hooks/useTranslation';
 import { MoonPhase } from '@/services/moonPhaseService';
 
 interface MoonVisualizationProps {
@@ -9,6 +10,8 @@ interface MoonVisualizationProps {
 }
 
 export function MoonVisualization({ moonPhase }: MoonVisualizationProps) {
+  const { translatePhase, t } = useTranslation();
+  
   return (
     <View style={styles.container}>
       <View style={styles.moonContainer}>
@@ -21,8 +24,8 @@ export function MoonVisualization({ moonPhase }: MoonVisualizationProps) {
       </View>
       
       <View style={styles.infoContainer}>
-        <Text style={styles.phaseName}>{moonPhase.phase}</Text>
-        <Text style={styles.illumination}>{moonPhase.illumination}% Illumination</Text>
+        <Text style={styles.phaseName}>{translatePhase(moonPhase.phase)}</Text>
+        <Text style={styles.illumination}>{moonPhase.illumination}% {t.home.illumination}</Text>
       </View>
     </View>
   );

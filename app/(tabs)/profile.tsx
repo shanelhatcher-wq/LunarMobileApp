@@ -3,46 +3,70 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { theme } from '@/constants/theme';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useTranslation } from '@/hooks/useTranslation';
+import { Language } from '@/services/translationService';
 import { SubscriptionPlanCard } from '@/components/feature/SubscriptionPlanCard';
+import { LanguagePicker } from '@/components/feature/LanguagePicker';
 import { useAlert } from '@/template';
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { status, startTrial, subscribe } = useSubscription();
   const { showAlert } = useAlert();
+  const { t, language, setLanguage } = useTranslation();
+  const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
+  const [showLanguagePicker, setShowLanguagePicker] = useState(false);
 
   const handleStartTrial = async () => {
     await startTrial();
-    showAlert('Success', 'Your 7-day free trial has started! Enjoy all premium features.');
+    showAlert(t.alerts.success, t.alerts.trialStarted);
   };
 
   const handleSubscribe = async () => {
     await subscribe(selectedPlan);
-    showAlert('Success', `You are now subscribed to Moon Pro ${selectedPlan}!`);
+    showAlert(t.alerts.success, `${t.alerts.subscribed} ${selectedPlan}!`);
   };
 
   const handleRestore = () => {
-    showAlert('Restore Purchases', 'No previous purchases found.');
+    showAlert(t.profile.restorePurchases, t.alerts.noPurchases);
   };
 
   const handleSettings = () => {
-    showAlert('Settings', 'Settings page coming soon!');
+    showAlert(t.profile.settings, t.alerts.comingSoon);
+  };
+
+  const handleAbout = () => {
+    router.push('/about' as any);
+  };
+
+  const handleLanguageChange = async (newLanguage: Language) => {
+    await setLanguage(newLanguage);
+    showAlert(t.alerts.success, t.alerts.languageChanged);
   };
 
   if (status.isPro) {
     return (
-      <ScrollView 
-        style={styles.container}
-        contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.header}>
-          <Text style={styles.title}>My Account</Text>
+      <View style={styles.container}>
+        <ScrollView 
+          style={styles.scrollView}
+          contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+          <Text style={styles.title}>{t.profile.title}</Text>
           <MaterialIcons name="account-circle" size={28} color={theme.colors.textSecondary} />
         </View>
+
+        <LanguagePicker
+          visible={showLanguagePicker}
+          currentLanguage={language}
+          onClose={() => setShowLanguagePicker(false)}
+          onSelect={handleLanguageChange}
+        />
 
         <View style={styles.proCard}>
           <View style={styles.moonIconLarge}>
@@ -53,15 +77,15 @@ export default function ProfileScreen() {
             />
           </View>
           
-          <Text style={styles.proTitle}>Moon Pro Active</Text>
+          <Text style={styles.proTitle}>{t.profile.moonProActive}</Text>
           <Text style={styles.proDescription}>
-            You have access to all premium features
+            {t.profile.allFeaturesAccess}
           </Text>
 
           {status.isTrialActive && status.trialEndsAt && (
             <View style={styles.trialBadge}>
               <Text style={styles.trialText}>
-                Trial ends {status.trialEndsAt.toLocaleDateString()}
+                {t.profile.trialEnds} {status.trialEndsAt.toLocaleDateString()}
               </Text>
             </View>
           )}
@@ -69,42 +93,59 @@ export default function ProfileScreen() {
           {!status.isTrialActive && status.expiresAt && (
             <View style={styles.trialBadge}>
               <Text style={styles.trialText}>
-                {status.plan === 'monthly' ? 'Monthly' : 'Yearly'} plan · Renews {status.expiresAt.toLocaleDateString()}
+                {status.plan === 'monthly' ? t.profile.monthlyPlan : t.profile.yearlyPlan} · {t.profile.renews} {status.expiresAt.toLocaleDateString()}
               </Text>
             </View>
           )}
         </View>
 
         <View style={styles.featuresList}>
-          <FeatureItem icon="check-circle" text="Ad-free experience" />
-          <FeatureItem icon="check-circle" text="Detailed analysis" />
-          <FeatureItem icon="check-circle" text="Home Screen Widgets" />
-          <FeatureItem icon="check-circle" text="Illumination trends" />
-          <FeatureItem icon="check-circle" text="Astrological insights" />
+          <FeatureItem icon="check-circle" text={t.profile.adFree} />
+          <FeatureItem icon="check-circle" text={t.profile.detailedAnalysis} />
+          <FeatureItem icon="check-circle" text={t.profile.widgets} />
+          <FeatureItem icon="check-circle" text={t.profile.illuminationTrends} />
+          <FeatureItem icon="check-circle" text={t.profile.astrologicalInsights} />
         </View>
 
         <View style={styles.actions}>
+          <Pressable style={styles.actionButton} onPress={() => setShowLanguagePicker(true)}>
+            <Text style={styles.actionText}>{t.profile.language}</Text>
+            <MaterialIcons name="chevron-right" size={20} color={theme.colors.textSecondary} />
+          </Pressable>
           <Pressable style={styles.actionButton} onPress={handleSettings}>
-            <Text style={styles.actionText}>Settings</Text>
+            <Text style={styles.actionText}>{t.profile.settings}</Text>
+            <MaterialIcons name="chevron-right" size={20} color={theme.colors.textSecondary} />
+          </Pressable>
+          <Pressable style={styles.actionButton} onPress={handleAbout}>
+            <Text style={styles.actionText}>{t.about.title}</Text>
             <MaterialIcons name="chevron-right" size={20} color={theme.colors.textSecondary} />
           </Pressable>
         </View>
 
-        <View style={styles.spacing} />
-      </ScrollView>
+          <View style={styles.spacing} />
+        </ScrollView>
+      </View>
     );
   }
 
   return (
-    <ScrollView 
-      style={styles.container}
-      contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.header}>
-        <Text style={styles.title}>My Account</Text>
+    <View style={styles.container}>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={{ paddingTop: insets.top + theme.spacing.md }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.header}>
+        <Text style={styles.title}>{t.profile.title}</Text>
         <MaterialIcons name="account-circle" size={28} color={theme.colors.textSecondary} />
       </View>
+
+      <LanguagePicker
+        visible={showLanguagePicker}
+        currentLanguage={language}
+        onClose={() => setShowLanguagePicker(false)}
+        onSelect={handleLanguageChange}
+      />
 
       <View style={styles.upgradeCard}>
         <View style={styles.moonIconLarge}>
@@ -115,54 +156,61 @@ export default function ProfileScreen() {
           />
         </View>
         
-        <Text style={styles.upgradeTitle}>Upgrade to Moon Pro</Text>
+        <Text style={styles.upgradeTitle}>{t.profile.upgradeToMoonPro}</Text>
 
         <View style={styles.featuresList}>
-          <FeatureItem icon="check" text="Ad-free experience" />
-          <FeatureItem icon="check" text="Detailed analysis" />
-          <FeatureItem icon="check" text="Home Screen Widgets" />
+          <FeatureItem icon="check" text={t.profile.adFree} />
+          <FeatureItem icon="check" text={t.profile.detailedAnalysis} />
+          <FeatureItem icon="check" text={t.profile.widgets} />
         </View>
       </View>
 
       <View style={styles.plansContainer}>
         <View style={styles.plansRow}>
           <SubscriptionPlanCard
-            title="Monthly"
+            title={t.profile.monthly}
             price="$2.99"
-            period="/month"
+            period={t.profile.month}
             selected={selectedPlan === 'monthly'}
             onSelect={() => setSelectedPlan('monthly')}
           />
           <SubscriptionPlanCard
-            title="Yearly"
+            title={t.profile.yearly}
             price="$19.99"
-            period="/year"
-            savings="(Save 48%)"
+            period={t.profile.year}
+            savings={`(${t.profile.save} 48%)`}
             selected={selectedPlan === 'yearly'}
             onSelect={() => setSelectedPlan('yearly')}
           />
         </View>
 
         <Pressable style={styles.trialButton} onPress={handleStartTrial}>
-          <Text style={styles.trialButtonText}>Start 7-Day Free Trial</Text>
+          <Text style={styles.trialButtonText}>{t.profile.startTrial}</Text>
         </Pressable>
 
         <Text style={styles.trialNote}>
-          Cancel anytime. After trial, ${selectedPlan === 'monthly' ? '2.99/month' : '19.99/year'}.
+          {t.profile.cancelAnytime}, ${selectedPlan === 'monthly' ? '2.99/month' : '19.99/year'}.
         </Text>
       </View>
 
       <View style={styles.actions}>
         <Pressable style={styles.actionButton} onPress={handleRestore}>
-          <Text style={styles.actionText}>Restore Purchases</Text>
+          <Text style={styles.actionText}>{t.profile.restorePurchases}</Text>
+        </Pressable>
+        <Pressable style={styles.actionButton} onPress={() => setShowLanguagePicker(true)}>
+          <Text style={styles.actionText}>{t.profile.language}</Text>
         </Pressable>
         <Pressable style={styles.actionButton} onPress={handleSettings}>
-          <Text style={styles.actionText}>Settings</Text>
+          <Text style={styles.actionText}>{t.profile.settings}</Text>
+        </Pressable>
+        <Pressable style={styles.actionButton} onPress={handleAbout}>
+          <Text style={styles.actionText}>{t.about.title}</Text>
         </Pressable>
       </View>
 
-      <View style={styles.spacing} />
-    </ScrollView>
+        <View style={styles.spacing} />
+      </ScrollView>
+    </View>
   );
 }
 
@@ -179,6 +227,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'transparent',
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -201,6 +252,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    backdropFilter: 'blur(10px)',
   },
   proCard: {
     backgroundColor: theme.colors.surface,
@@ -211,6 +263,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.md,
     borderWidth: 2,
     borderColor: theme.colors.primary,
+    backdropFilter: 'blur(10px)',
   },
   moonIconLarge: {
     width: 80,
@@ -306,6 +359,7 @@ const styles = StyleSheet.create({
     padding: theme.spacing.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    backdropFilter: 'blur(10px)',
   },
   actionText: {
     fontSize: 16,

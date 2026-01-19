@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
     alignItems: 'center',
     gap: theme.spacing.xs,
+    backdropFilter: 'blur(10px)',
   },
   selected: {
     backgroundColor: theme.colors.surfaceLight,
